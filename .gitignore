@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.vscode/settings.json
+src/components/vidly00.jsx
+src/components/vidly01.jsx
+src/components/common/pagination copy.jsx
