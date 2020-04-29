@@ -1,5 +1,6 @@
 import React from "react";
 import _ from "lodash";
+import PropTypes from "prop-types";
 // stateless function
 const Pagination = (props) => {
   const { itemsCount, pageSize, onPageChange, currentPage } = props;
@@ -21,7 +22,7 @@ const Pagination = (props) => {
           >
             <a
               className="page-link"
-              href="#home"
+              href="#Pagination"
               onClick={() => onPageChange(page)}
             >
               {page}
@@ -31,6 +32,12 @@ const Pagination = (props) => {
       </ul>
     </nav>
   );
+};
+Pagination.propTypes = {
+  itemsCount: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
 };
 
 export default Pagination;
