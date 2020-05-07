@@ -15,7 +15,7 @@ class TableHeader extends Component {
     console.log("TableHeader sortColumn=>", sortColumn);
   };
 
-  renderSortIcon = (column) => {
+   renderSortIcon = (column) => {
     const { sortColumn } = this.props;
     if (column.path !== sortColumn.path && column.key === undefined)
       return <i className="fa fa-sort" aria-hidden="true" />;
@@ -23,7 +23,7 @@ class TableHeader extends Component {
     if (sortColumn.order === "asc")
       return <i className="fa fa-sort-asc" aria-hidden="true" />;
     return <i className="fa fa-sort-desc" aria-hidden="true" />;
-  };
+  }; 
 
   render() {
     return (
@@ -36,7 +36,7 @@ class TableHeader extends Component {
               scope="col"
               onClick={() => this.raiseSort(column.path)}
             >
-              {column.label} {this.renderSortIcon(column)}
+              {column.label}  {this.renderSortIcon(column)} 
             </th>
           ))}
         </tr>
