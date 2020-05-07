@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Like from "./common/like";
 import Table from "./common/table";
-import TableHeader from "./common/tableHeader";
-import TableBody from "./common/tableBody";
 
 class MovieTable extends Component {
   columns = [
@@ -19,7 +17,7 @@ class MovieTable extends Component {
         />
       ),
     },
-    {
+    { 
       key: "delete",
       content: (movie) => (
         <button
@@ -39,12 +37,14 @@ class MovieTable extends Component {
 
     return (
 
-      <table className="table table-dark table-striped">
+/*        <table className="table table-dark table-striped">
       <TableHeader sortColumn={sortColumn} onSort={onSort} columns={this.columns} />
 
       <TableBody data={movies} columns={this.columns} />
-    </table>
+    </table>  */
 
+     <Table data={movies} sortColumn={sortColumn} onSort={onSort} columns={this.columns}/>
+ 
     );
   }
 }
