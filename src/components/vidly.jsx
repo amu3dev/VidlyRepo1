@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
-import Like from "./common/like";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
 import { getGenres } from "../services/fakeGenreService";
+import MovieTable from "./moviesTable";
+import _ from "lodash";
 
 class Vidly extends Component {
   state = {
@@ -13,6 +14,7 @@ class Vidly extends Component {
     pageSize: 4,
     currentPage: 1,
     selectedGenre: "",
+    sortColumn: { path: "title", order: "asc" },
   };
 
   componentDidMount() {
@@ -44,20 +46,30 @@ class Vidly extends Component {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
 
+  handleSort = (sortColumn) => {
+    this.setState({ sortColumn });
+  };
+
   render() {
     const {
       pageSize,
       currentPage,
       selectedGenre,
       movies: allMovies,
+      sortColumn,
     } = this.state;
 
-    let filtered =
+    // filter=> sort => paginate
+    const filtered =
       selectedGenre && selectedGenre._id !== "All Genres"
         ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
         : allMovies;
 
-    const movies = paginate(filtered, currentPage, pageSize);
+    //console.log(sortColumn);
+
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+    const movies = paginate(sorted, currentPage, pageSize);
 
     const x = `Showing ${movies.length} Movies in the DB from Total ${this.state.movies.length}`;
     const y = "There is no Movies in DB";
@@ -72,52 +84,14 @@ class Vidly extends Component {
           />
         </div>
         <div className="col">
-          {" "}
           <p className="h4">{this.state.movies.length > 0 ? x : y}</p>
-          <table className="table table-dark">
-            <thead>
-              <tr>
-                <th key="Title" scope="col">
-                  Title
-                </th>
-                <th key="Genre" scope="col">
-                  Genre
-                </th>
-                <th key="Stock" scope="col">
-                  Stock
-                </th>
-                <th key="Rate" scope="col">
-                  Rate
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {movies.map((movie) => (
-                <tr key={movie._id}>
-                  <th scope="row">{movie.title}</th>
-                  <td>{movie.genre.name}</td>
-                  <td>{movie.numberInStock}</td>
-                  <td>{movie.dailyRentalRate}</td>
-                  <td>
-                    <Like
-                      liked={movie.liked}
-                      onClick={() => this.handleLike(movie)}
-                    />
-                  </td>
-                  <td>
-                    <button
-                      onClick={() => this.deleteRow(movie)}
-                      type="button"
-                      className="btn btn-sm btn-danger"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <MovieTable
+            movies={movies}
+            sortColumn={sortColumn}
+            onHandleLike={this.handleLike}
+            onDeleteRow={this.deleteRow}
+            onSort={this.handleSort}
+          />
           <Pagination
             itemsCount={filtered.length}
             pageSize={pageSize}
