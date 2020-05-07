@@ -1,9 +1,8 @@
 import React from "react";
 import TableHeader from "./tableHeader";
-import TableBody from "./tableHeader";
+import TableBody from "./tableBody";
 
 const Table = ({ columns, sortColumn, onSort, data }) => {
-  //const { data, sortColumn, onSort, columns } = props;
 
   return (
     <table className="table table-dark table-striped">
