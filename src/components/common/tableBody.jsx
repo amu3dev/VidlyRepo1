@@ -17,7 +17,7 @@ class TableBody extends Component {
           <tr key={item._id}>
             {columns.map((column) =>
               column.path === "title" ? (
-                <th  key={this.createKey(item, column)} scope="row">{_.get(item, column.path)}</th>
+                <th  key={this.createKey(item, column)} scope="row">{/* {_.get(item, column.path)} */} {this.renderCell(item, column)}</th>
               ) : (
                 <td key={this.createKey(item, column)}>
                   {this.renderCell(item, column)}

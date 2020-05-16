@@ -50,7 +50,7 @@ class Vidly extends Component {
     this.setState({ sortColumn });
   };
 
-  render() {
+  getPageData = () => {
     const {
       pageSize,
       currentPage,
@@ -58,20 +58,23 @@ class Vidly extends Component {
       movies: allMovies,
       sortColumn,
     } = this.state;
-
     // filter=> sort => paginate
     const filtered =
       selectedGenre && selectedGenre._id !== "All Genres"
         ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
         : allMovies;
 
-    //console.log(sortColumn);
-
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
-
     const movies = paginate(sorted, currentPage, pageSize);
+    return { totalCount: filtered.length, data: movies };
+  };
 
-    const x = `Showing ${movies.length} Movies in the DB from Total ${this.state.movies.length}`;
+  render() {
+    const { pageSize, currentPage, sortColumn } = this.state;
+
+    const { data, totalCount } = this.getPageData();
+
+    const x = `Showing ${data.length} Movies in the DB from Total ${this.state.movies.length}`;
     const y = "There is no Movies in DB";
 
     return (
@@ -86,14 +89,14 @@ class Vidly extends Component {
         <div className="col">
           <p className="h4">{this.state.movies.length > 0 ? x : y}</p>
           <MovieTable
-            movies={movies}
+            movies={data}
             sortColumn={sortColumn}
             onHandleLike={this.handleLike}
             onDeleteRow={this.deleteRow}
             onSort={this.handleSort}
           />
           <Pagination
-            itemsCount={filtered.length}
+            itemsCount={totalCount}
             pageSize={pageSize}
             onPageChange={this.handlePageChange}
             currentPage={currentPage}

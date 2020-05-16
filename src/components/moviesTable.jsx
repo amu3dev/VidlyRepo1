@@ -1,10 +1,18 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import Like from "./common/like";
 import Table from "./common/table";
 
 class MovieTable extends Component {
   columns = [
-    { path: "title", label: "Title" },
+    {
+      path: "title",
+      label: "Title",
+      content: (movie) => (
+        <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+      ),
+    },
     { path: "genre.name", label: "Genre" },
     { path: "numberInStock", label: "Stock" },
     { path: "dailyRentalRate", label: "Rate" },
@@ -17,7 +25,7 @@ class MovieTable extends Component {
         />
       ),
     },
-    { 
+    {
       key: "delete",
       content: (movie) => (
         <button
@@ -33,18 +41,21 @@ class MovieTable extends Component {
   render() {
     const { movies, sortColumn, onSort } = this.props;
 
-    console.log('columns = >', this.columns);
+    console.log("columns = >", this.columns);
 
     return (
-
-/*        <table className="table table-dark table-striped">
+      /*        <table className="table table-dark table-striped">
       <TableHeader sortColumn={sortColumn} onSort={onSort} columns={this.columns} />
 
       <TableBody data={movies} columns={this.columns} />
     </table>  */
 
-     <Table data={movies} sortColumn={sortColumn} onSort={onSort} columns={this.columns}/>
- 
+      <Table
+        data={movies}
+        sortColumn={sortColumn}
+        onSort={onSort}
+        columns={this.columns}
+      />
     );
   }
 }
