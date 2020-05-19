@@ -79,7 +79,7 @@ class Vidly extends Component {
 
     return (
       <div className="row">
-        <div className="col-2">
+        <div className="col-sm-2">
           <ListGroup
             onItemSelect={this.handleGenreSelect}
             items={this.state.genres}
