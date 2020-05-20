@@ -1,15 +1,22 @@
 import React, { Component } from "react";
 import Input from "./common/input";
 class LoginForm extends Component {
-  state = { account: { username: "", password: "" } };
+  state = { account: { username: "", password: "" }, errors: {} };
   username = React.createRef();
 
   /*   componentDidMount() {
     this.username.current.focus();
   } */
+  validate = () => {
+    return { username: "Username is required" };
+  };
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log("preventDefault --submitted");
+
+    const errors = this.validate();
+    this.setState({ errors });
+    if (errors) return;
+    //console.log("preventDefault --submitted");
     // call the server --
     // in react we shouldn't access DOM like this
     //const username = document.getElementById("username").value;
