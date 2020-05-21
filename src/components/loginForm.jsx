@@ -1,19 +1,29 @@
 import React, { Component } from "react";
 import Input from "./common/input";
 class LoginForm extends Component {
-  state = { account: { username: "", password: "" }, errors: {} };
+  state = {
+    account: { username: "", password: "" },
+    errors: {},
+  };
   username = React.createRef();
 
   /*   componentDidMount() {
     this.username.current.focus();
   } */
   validate = () => {
-    return { username: "Username is required" };
+    const errors = {};
+    const { account } = this.state;
+
+    if (account.username.trim() === "") errors.username = "user required!";
+    if (account.password.trim() === "") errors.password = "password required!";
+    return Object.keys(errors).length === 0 ? null : errors;
   };
   handleSubmit = (e) => {
     e.preventDefault();
 
     const errors = this.validate();
+    console.log("errors---", errors);
+
     this.setState({ errors });
     if (errors) return;
     //console.log("preventDefault --submitted");
@@ -21,8 +31,9 @@ class LoginForm extends Component {
     // in react we shouldn't access DOM like this
     //const username = document.getElementById("username").value;
     // properly to access
-    const username = this.username.current.value;
-    console.log("username --submitted", username);
+    /*     const username = this.username.current.value;
+    console.log("username --submitted", username); */
+    console.log("form --submitted");
   };
 
   handleChange = ({ currentTarget: input }) => {
