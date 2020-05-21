@@ -24,7 +24,7 @@ class LoginForm extends Component {
     const errors = this.validate();
     console.log("errors---", errors);
 
-    this.setState({ errors });
+    this.setState({ errors: errors || {} });
     if (errors) return;
     //console.log("preventDefault --submitted");
     // call the server --
@@ -44,7 +44,7 @@ class LoginForm extends Component {
     this.setState({ account });
   };
   render() {
-    const { account } = this.state;
+    const { account, errors } = this.state;
     return (
       <div>
         <h1>Login</h1>
@@ -55,6 +55,7 @@ class LoginForm extends Component {
             label="Username"
             value={account.username}
             onChange={this.handleChange}
+            error={errors.username}
           />
 
           <Input
@@ -62,6 +63,7 @@ class LoginForm extends Component {
             label="Password"
             value={account.password}
             onChange={this.handleChange}
+            error={errors.password}
           />
 
           {/*     ZenMode      button.btn.btn-primary*/}
