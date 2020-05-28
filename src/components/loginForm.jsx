@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Joi from "joi-browser";
 import Input from "./common/input";
 class LoginForm extends Component {
   state = {
@@ -7,17 +8,44 @@ class LoginForm extends Component {
   };
   username = React.createRef();
 
+  schema = {
+    username: Joi.string().required().label("Username"),
+    password: Joi.string().required().label("Password"),
+  };
+
   /*   componentDidMount() {
     this.username.current.focus();
   } */
   validate = () => {
+    const options = {
+      abortEarly: false,
+    };
+    const { error } = Joi.validate(this.state.account, this.schema, options);
+
+    if (!error) return null;
     const errors = {};
+
+    for (let item of error.details) errors[item.path[0]] = item.message;
+
+    return errors;
+
+    /*     const errors = {};
     const { account } = this.state;
 
     if (account.username.trim() === "") errors.username = "user required!";
     if (account.password.trim() === "") errors.password = "password required!";
-    return Object.keys(errors).length === 0 ? null : errors;
+    return Object.keys(errors).length === 0 ? null : errors; */
   };
+
+  validateProperty = ({ name, value }) => {
+    /*     if (input.name === "username") {
+      if (input.value.trim() === "") return "username is required";
+    }
+    if (input.name === "password") {
+      if (input.value.trim() === "") return "password is required";
+    } */
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
 
@@ -34,14 +62,6 @@ class LoginForm extends Component {
     /*     const username = this.username.current.value;
     console.log("username --submitted", username); */
     console.log("form --submitted");
-  };
-  validateProperty = (input) => {
-    if (input.name === "username") {
-      if (input.value.trim() === "") return "username is required";
-    }
-    if (input.name === "password") {
-      if (input.value.trim() === "") return "password is required";
-    }
   };
 
   handleChange = ({ currentTarget: input }) => {
@@ -80,7 +100,9 @@ class LoginForm extends Component {
           />
 
           {/*     ZenMode      button.btn.btn-primary*/}
-          <button className="btn btn-primary">Login</button>
+          <button disabled={this.validate()} className="btn btn-primary">
+            Login
+          </button>
         </form>
       </div>
     );
