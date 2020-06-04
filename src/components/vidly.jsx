@@ -6,6 +6,7 @@ import ListGroup from "./common/listGroup";
 import { getGenres } from "../services/fakeGenreService";
 import MovieTable from "./moviesTable";
 import _ from "lodash";
+import NewMovieButton from "./newMovieButton";
 
 class Vidly extends Component {
   state = {
@@ -79,14 +80,16 @@ class Vidly extends Component {
 
     return (
       <div className="row">
-        <div className="col-sm-2">
+        <div className="col-md-auto">
           <ListGroup
             onItemSelect={this.handleGenreSelect}
             items={this.state.genres}
             selectedGenre={this.state.selectedGenre}
           />
         </div>
+
         <div className="col">
+          <NewMovieButton />
           <p className="h4">{this.state.movies.length > 0 ? x : y}</p>
           <MovieTable
             movies={data}
