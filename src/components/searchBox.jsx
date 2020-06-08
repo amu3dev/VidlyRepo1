@@ -11,9 +11,6 @@ const SearchBox = ({ value, onChange }) => {
         value={value}
         onChange={(e) => onChange(e.currentTarget.value)}
       />
-      <button type="submit">
-        <i className="fa fa-search" aria-hidden="true"></i>
-      </button>
     </div>
   );
 };
