@@ -7,6 +7,7 @@ import { getGenres } from "../services/fakeGenreService";
 import MovieTable from "./moviesTable";
 import _ from "lodash";
 import NewMovieButton from "./newMovieButton";
+import SearchBox from "./searchBox";
 
 class Vidly extends Component {
   state = {
@@ -15,6 +16,7 @@ class Vidly extends Component {
     pageSize: 4,
     currentPage: 1,
     selectedGenre: "",
+    searchQuery: "",
     sortColumn: { path: "title", order: "asc" },
   };
 
@@ -44,11 +46,20 @@ class Vidly extends Component {
 
   handleGenreSelect = (genre) => {
     this.state.movies.filter((movie) => movie.genre.name === genre.name);
-    this.setState({ selectedGenre: genre, currentPage: 1 });
+    this.setState({ searchQuery: "", selectedGenre: genre, currentPage: 1 });
   };
 
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
+  };
+
+  handleSearchBoxChange = (query) => {
+    this.setState({
+      searchQuery: query,
+      selectedGenre: "anyValueEvenNull",
+      currentPage: 1,
+    });
+    console.log("query =>", query);
   };
 
   getPageData = () => {
@@ -56,14 +67,24 @@ class Vidly extends Component {
       pageSize,
       currentPage,
       selectedGenre,
-      movies: allMovies,
       sortColumn,
+      searchQuery,
+      movies: allMovies,
     } = this.state;
     // filter=> sort => paginate
-    const filtered =
+    let filtered = allMovies;
+
+    if (searchQuery)
+      filtered = allMovies.filter((m) =>
+        m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    else if (
       selectedGenre && selectedGenre._id !== "All Genres"
-        ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
-        : allMovies;
+        ? (filtered = allMovies.filter(
+            (m) => m.genre._id === selectedGenre._id
+          ))
+        : filtered
+    );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const movies = paginate(sorted, currentPage, pageSize);
@@ -71,7 +92,7 @@ class Vidly extends Component {
   };
 
   render() {
-    const { pageSize, currentPage, sortColumn } = this.state;
+    const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
 
     const { data, totalCount } = this.getPageData();
 
@@ -90,6 +111,10 @@ class Vidly extends Component {
 
         <div className="col">
           <NewMovieButton />
+          <SearchBox
+            value={searchQuery}
+            onChange={this.handleSearchBoxChange}
+          />
           <p className="h4">{this.state.movies.length > 0 ? x : y}</p>
           <MovieTable
             movies={data}
